@@ -1,0 +1,46 @@
+namespace: mydiary
+
+images:
+  frontend: cryptortheoneste/mydiary-frontend:1.0.0
+  backend: cryptortheoneste/mydiary-backend:1.0.0
+  postgres: postgres:16.6-bookworm
+  redis: redis:7.4-alpine
+  nginx: nginx:1.28-alpine
+
+storage:
+  className: local-path
+  size: 5Gi
+
+service:
+  nodePort: 30080
+
+postgres:
+  database: diary
+  username: diary
+
+backend:
+  replicas: 1
+  seedEnabled: "true"
+
+frontend:
+  replicas: 2
+
+redis:
+  enabled: true
+
+resources:
+  frontend:
+    requests: { cpu: 100m, memory: 128Mi }
+    limits: { cpu: 500m, memory: 512Mi }
+  backend:
+    requests: { cpu: 250m, memory: 384Mi }
+    limits: { cpu: "1500m", memory: 768Mi }
+  postgres:
+    requests: { cpu: 250m, memory: 256Mi }
+    limits: { cpu: "1000m", memory: 1Gi }
+  redis:
+    requests: { cpu: 50m, memory: 64Mi }
+    limits: { cpu: 500m, memory: 256Mi }
+  nginx:
+    requests: { cpu: 50m, memory: 32Mi }
+    limits: { cpu: 500m, memory: 128Mi }
