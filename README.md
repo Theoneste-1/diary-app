@@ -7,7 +7,7 @@
 | Candidate number | Candidate-2 |
 | Name | DUFITIMANA Theoneste |
 | Email | [dufitimanatheoneste05@gmail.com](mailto:dufitimanatheoneste05@gmail.com) |
-| Phone | 0796555276 |
+| Phone | 0793559258 |
 | WhatsApp | 0786555276 |
 
 
