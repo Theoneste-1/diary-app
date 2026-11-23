@@ -1,0 +1,36 @@
+
+---
+- name: Generate Kubernetes worker join command
+  hosts: c2-k8s-master
+  become: true
+  tasks:
+    - name: Generate join command
+      ansible.builtin.command:
+        cmd: kubeadm token create --print-join-command
+      register: kubeadm_join_command
+      changed_when: false
+      no_log: true
+
+- name: Join Kubernetes worker nodes
+  hosts: "c2-k8s-worker-1,c2-k8s-worker-2"
+  become: true
+
+  tasks:
+    - name: Check whether worker has already joined
+      ansible.builtin.stat:
+        path: /etc/kubernetes/kubelet.conf
+      register: kubelet_config
+
+    - name: Join worker to Kubernetes cluster
+      ansible.builtin.command:
+        cmd: >-
+          {{ hostvars['c2-k8s-master'].kubeadm_join_command.stdout }}
+          --cri-socket=unix:///run/containerd/containerd.sock
+      when: not kubelet_config.stat.exists
+      no_log: true
+
+    - name: Ensure kubelet is enabled and running
+      ansible.builtin.systemd_service:
+        name: kubelet
+        enabled: true
+        state: started

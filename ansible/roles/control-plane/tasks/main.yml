@@ -1,0 +1,75 @@
+
+---
+- name: Check whether Kubernetes master is already initialized
+  ansible.builtin.stat:
+    path: /etc/kubernetes/admin.conf
+  register: kubeadm_admin_conf
+
+- name: Initialize Kubernetes control plane
+  ansible.builtin.command:
+    argv:
+      - kubeadm
+      - init
+      - --apiserver-advertise-address=192.168.160.76
+      - --pod-network-cidr=10.244.0.0/16
+      - --kubernetes-version=v1.37.2
+      - --cri-socket=unix:///run/containerd/containerd.sock
+  when: not kubeadm_admin_conf.stat.exists
+
+- name: Create kubectl configuration directory
+  ansible.builtin.file:
+    path: /home/devops/.kube
+    state: directory
+    owner: devops
+    group: devops
+    mode: '0755'
+
+- name: Copy Kubernetes admin configuration
+  ansible.builtin.copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /home/devops/.kube/config
+    remote_src: true
+    owner: devops
+    group: devops
+    mode: '0600'
+
+- name: Verify Kubernetes API server
+  ansible.builtin.command:
+    argv:
+      - kubectl
+      - get
+      - nodes
+  environment:
+    KUBECONFIG: /home/devops/.kube/config
+  register: kubectl_nodes
+  changed_when: false
+
+- name: Display control plane status
+  ansible.builtin.debug:
+    var: kubectl_nodes.stdout_lines
+
+- name: Install Flannel CNI network plugin
+  ansible.builtin.command:
+    argv:
+      - kubectl
+      - apply
+      - -f
+      - https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+  environment:
+    KUBECONFIG: /home/devops/.kube/config
+  register: flannel_install
+  changed_when: "'created' in flannel_install.stdout or 'configured' in flannel_install.stdout"
+
+- name: Wait for Flannel DaemonSet rollout
+  ansible.builtin.command:
+    argv:
+      - kubectl
+      - rollout
+      - status
+      - daemonset/kube-flannel-ds
+      - -n
+      - kube-flannel
+      - --timeout=180s
+  environment:
+    KUBECONFIG: /home/devops/.kube/config
+  changed_when: false

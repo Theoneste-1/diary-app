@@ -1,0 +1,28 @@
+- name: Check whether containerd config is complete
+  ansible.builtin.command: grep -q 'SystemdCgroup' /etc/containerd/config.toml
+  register: containerd_cfg_check
+  failed_when: false
+  changed_when: false
+
+- name: Generate default containerd configuration
+  ansible.builtin.shell: containerd config default > /etc/containerd/config.toml
+  when: containerd_cfg_check.rc != 0
+  notify: Restart containerd
+
+- name: Ensure containerd CRI plugin is enabled
+  ansible.builtin.replace:
+    path: /etc/containerd/config.toml
+    regexp: '^disabled_plugins = \[.*\]$'
+    replace: 'disabled_plugins = []'
+  notify: Restart containerd
+
+- name: Configure systemd cgroup driver
+  ansible.builtin.replace:
+    path: /etc/containerd/config.toml
+    regexp: 'SystemdCgroup = false'
+    replace: 'SystemdCgroup = true'
+  notify: Restart containerd
+
+- name: Verify systemd cgroup driver is set
+  ansible.builtin.command: grep -q 'SystemdCgroup = true' /etc/containerd/config.toml
+  changed_when: false

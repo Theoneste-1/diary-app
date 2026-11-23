@@ -1,0 +1,13 @@
+==========================================
+Cluster Information
+Date: Mon Nov 23 14:34:21 SAST 2026
+==========================================
+
+E1123 14:34:21.565762   19500 memcache.go:381] "Couldn't get current server API group list" err="Get \"http://localhost:8080/api?timeout=32s\": dial tcp 127.0.0.1:8080: connect: connection refused"
+E1123 14:34:21.566405   19500 memcache.go:381] "Couldn't get current server API group list" err="Get \"http://localhost:8080/api?timeout=32s\": dial tcp 127.0.0.1:8080: connect: connection refused"
+E1123 14:34:21.567988   19500 memcache.go:381] "Couldn't get current server API group list" err="Get \"http://localhost:8080/api?timeout=32s\": dial tcp 127.0.0.1:8080: connect: connection refused"
+E1123 14:34:21.568318   19500 memcache.go:381] "Couldn't get current server API group list" err="Get \"http://localhost:8080/api?timeout=32s\": dial tcp 127.0.0.1:8080: connect: connection refused"
+E1123 14:34:21.569843   19500 memcache.go:381] "Couldn't get current server API group list" err="Get \"http://localhost:8080/api?timeout=32s\": dial tcp 127.0.0.1:8080: connect: connection refused"
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+The connection to the server localhost:8080 was refused - did you specify the right host or port?

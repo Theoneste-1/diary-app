@@ -1,0 +1,8 @@
+==========================================
+Memory Usage
+Date: Mon Nov 23 14:34:25 SAST 2026
+==========================================
+
+               total        used        free      shared  buff/cache   available
+Mem:           7.6Gi       1.4Gi       5.5Gi        43Mi       1.0Gi       6.3Gi
+Swap:          2.0Gi          0B       2.0Gi

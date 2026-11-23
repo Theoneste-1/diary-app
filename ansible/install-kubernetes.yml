@@ -1,0 +1,15 @@
+
+---
+- name: Prepare Kubernetes nodes
+  hosts: kube_cluster
+  become: true
+
+  roles:
+    - kubernetes-node
+
+- name: Install Kubernetes components
+  hosts: kube_cluster
+  become: true
+
+  roles:
+    - kubernetes

@@ -1,0 +1,19 @@
+
+---
+# Common configuration for all Kubernetes nodes
+
+ansible_python_interpreter: /usr/bin/python3
+
+# Kubernetes configuration
+kubernetes_version: "1.32"
+kubernetes_package_version: "1.32.0"
+
+# Container runtime
+container_runtime: containerd
+
+# Kubernetes networking
+pod_network_cidr: "10.244.0.0/16"
+cni_plugin: flannel
+
+# Cluster configuration
+control_plane_endpoint: "192.168.160.76:6443"

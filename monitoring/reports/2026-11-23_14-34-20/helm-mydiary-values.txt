@@ -1,0 +1,6 @@
+==========================================
+MyDiary Helm Values
+Date: Mon Nov 23 14:34:25 SAST 2026
+==========================================
+
+./collect-k8s-monitoring.sh: line 33: helm: command not found

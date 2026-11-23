@@ -1,0 +1,8 @@
+
+---
+- name: Initialize Kubernetes control plane
+  hosts: c2-k8s-master
+  become: true
+
+  roles:
+    - control-plane
